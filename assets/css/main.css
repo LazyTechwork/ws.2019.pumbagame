@@ -114,6 +114,10 @@ td, th {
     line-height: 2;
 }
 
+.gamescreen {
+    display: none;
+}
+
 .foreground * {
     position: absolute;
     left: 0;

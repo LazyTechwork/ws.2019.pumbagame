@@ -1,11 +1,12 @@
 let startscreen = $('.screen-start');
 let instrscreen = $('.screen-instructions');
 let resultsscreen = $('.screen-results');
+let gamescreen = $('.gamescreen');
 let body = $('body');
 let video = $('video')[0];
 let game = null;
 $(document).ready(function () {
-    // startscreen.animate({left: '50%'});
+    startscreen.animate({left: '50%'});
     $('#entername').submit((e) => {
         e.preventDefault();
         startscreen.animate({left: '150%'}, {
@@ -38,13 +39,12 @@ $(document).ready(function () {
         if (ev.key === 'ArrowUp' || ev.key === ' ')
             game.keys.space = false;
     });
-    game = new Game();
 });
 
 function skipVideo() {
     video.pause();
     instrscreen.animate({top: '150%'});
-    game = new Game();
+    gamescreen.fadeIn(400, () => game = new Game());
     // resultsscreen.animate({left: '50%'});
 }
 
@@ -70,6 +70,10 @@ class Game {
             this.frames = 0;
             this.time++;
             this.player.hp -= 1;
+
+            if (this.player.hp <= 0)
+                this.player.hp = 100;
+
             this.renderStatusbars();
         }
         if (this.keys.right)
