@@ -20,14 +20,23 @@ $(document).ready(function () {
     $(document).on('keydown', function (ev) {
         if (game === null)
             return;
-        switch (ev.key) {
-            case 'ArrowRight':
-                game.player.x += 10;
-                break;
-            case 'ArrowLeft':
-                game.player.x -= 10;
-                break;
-        }
+        console.log(game.keys);
+        if (ev.key === 'ArrowRight' || ev.key === 'd')
+            game.keys.right = true;
+        if (ev.key === 'ArrowLeft' || ev.key === 'a')
+            game.keys.left = true;
+        if (ev.key === 'ArrowUp' || ev.key === ' ')
+            game.keys.space = true;
+    });
+    $(document).on('keyup', function (ev) {
+        if (game === null)
+            return;
+        if (ev.key === 'ArrowRight' || ev.key === 'd')
+            game.keys.right = false;
+        if (ev.key === 'ArrowLeft' || ev.key === 'a')
+            game.keys.left = false;
+        if (ev.key === 'ArrowUp' || ev.key === ' ')
+            game.keys.space = false;
     });
     game = new Game();
 });
@@ -41,11 +50,17 @@ function skipVideo() {
 
 class Game {
     constructor() {
-        this.player = new Player(0, 0, 0);
+        this.player = new Player(this, 0, 0, 0);
         this.frames = 0;
         this.time = 0;
         this.timeel = $('.timer span');
         this.hpel = $('.hpbar span');
+        this.playerspeed = 10;
+        this.keys = {
+            left: false,
+            right: false,
+            space: false
+        };
         requestAnimationFrame(() => this.loop());
     }
 
@@ -57,7 +72,15 @@ class Game {
             this.player.hp -= 1;
             this.renderStatusbars();
         }
+        if (this.keys.right)
+            this.player.x += this.playerspeed;
+        if (this.keys.left)
+            this.player.x -= this.playerspeed;
+        if (this.keys.space && !game.player.isInFly && !game.player.isInFall)
+            game.player.isInFly = true;
+
         this.player.render();
+
         requestAnimationFrame(() => this.loop());
     }
 
@@ -76,15 +99,32 @@ class Game {
 }
 
 class Player {
-    constructor(x, y, type) {
+    constructor(game, x, y, type) {
         this.x = x;
         this.y = y;
+        this.game = game;
         this.type = type;
         this.el = $('.player');
         this.hp = 100;
+        this.isInFly = false;
+        this.isInFall = false;
     }
 
     render() {
+        if (this.isInFly)
+            if (this.y >= 250) {
+                this.y = 250;
+                this.isInFly = false;
+                this.isInFall = true;
+            } else
+                this.y += this.game.playerspeed;
+        else if (this.isInFall)
+            if (this.y <= 0) {
+                this.y = 0;
+                this.isInFall = this.isInFly = false;
+            } else {
+                this.y -= this.game.playerspeed;
+            }
         this.el.css({left: (this.x + 20) + 'px', bottom: (this.y + 25) + 'px'});
     }
 }
