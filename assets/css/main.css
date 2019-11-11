@@ -139,16 +139,20 @@ td, th {
     width: 10vw;
 }
 
-.timer, .score {
+.bottombars * {
     padding: 5px 15px;
-    background: #1d7bff;
     color: #ffffff;
     width: 100%;
     text-align: right;
 }
 
-.timer {
+.nickname {
     border-radius: 5px 0 0 0;
+    background: #cd6800;
+}
+
+.timer {
+    background: #1d7bff;
 }
 
 .score {
@@ -180,4 +184,39 @@ td, th {
 
 .player {
     height: 250px;
+}
+
+input.shake {
+    animation: shake 1s;
+}
+
+.jump {
+    display: inline-block;
+    animation: jump 1s;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-10px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(10px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-10px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(10px, 0, 0);
+    }
+}
+
+@keyframes jump {
+    60% {
+        transform: translateY(-20px);
+        color: #1853a7;
+    }
+    100% {
+        transform: translateY(0);
+        color: #000000;
+    }
 }

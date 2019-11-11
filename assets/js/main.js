@@ -4,11 +4,19 @@ let resultsscreen = $('.screen-results');
 let gamescreen = $('.gamescreen');
 let body = $('body');
 let video = $('video')[0];
+let nick = '';
 let game = null;
 $(document).ready(function () {
     startscreen.animate({left: '50%'});
     $('#entername').submit((e) => {
         e.preventDefault();
+        let nicknameel = $('input#name');
+        if (!nicknameel.val()) {
+            nicknameel.addClass('shake');
+            setTimeout(() => nicknameel.removeClass('shake'), 1000);
+            return;
+        }
+        nick = nicknameel.val();
         startscreen.animate({left: '150%'}, {
             complete: () => {
                 instrscreen.animate({left: '50%'}, {complete: () => video.play()});
@@ -38,28 +46,40 @@ $(document).ready(function () {
         if (ev.key === 'ArrowUp' || ev.key === ' ')
             game.keys.space = false;
     });
+    $('.animateByJump').each((iii, el) => {
+        el = $(el);
+        let text = el.text();
+        text = text.split('');
+        text.forEach((textt, i) => text[i] = textt === ' ' ? ' ' : '<span>' + textt + '</span>');
+        el.html(text);
+        el.children('span').each((i, ell) => setTimeout(() => $(ell).addClass('jump'), 200 * i));
+    });
 });
 
 function skipVideo() {
     video.pause();
     instrscreen.animate({top: '150%'});
-    gamescreen.fadeIn(400, () => game = new Game());
+    gamescreen.fadeIn(400, () => game = new Game(nick));
     // resultsscreen.animate({left: '50%'});
 }
 
 class Game {
-    constructor() {
+    constructor(playername) {
         this.player = new Player(this, 20, 0, 0);
         this.frames = 0;
         this.time = 0;
         this.timeel = $('.timer span');
         this.hpel = $('.hpbar span');
+        this.nickel = $('.nickname span');
         this.playerspeed = 10;
+        this.playername = playername;
         this.keys = {
             left: false,
             right: false,
             space: false
         };
+
+        this.renderStatusbars();
         requestAnimationFrame(() => this.loop());
     }
 
@@ -102,6 +122,8 @@ class Game {
 
         this.hpel.html(this.player.hp + "HP");
         this.hpel.animate({width: this.player.hp + "%"});
+
+        this.nickel.html(this.playername);
     }
 }
 
