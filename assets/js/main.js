@@ -17,6 +17,18 @@ $(document).ready(function () {
     });
     video.addEventListener('ended', () => skipVideo());
     $('.skipvideo').click(() => skipVideo());
+    $(document).on('keydown', function (ev) {
+        if (game === null)
+            return;
+        switch (ev.key) {
+            case 'ArrowRight':
+                game.player.x += 10;
+                break;
+            case 'ArrowLeft':
+                game.player.x -= 10;
+                break;
+        }
+    });
     game = new Game();
 });
 
@@ -45,6 +57,7 @@ class Game {
             this.player.hp -= 1;
             this.renderStatusbars();
         }
+        this.player.render();
         requestAnimationFrame(() => this.loop());
     }
 
@@ -72,6 +85,6 @@ class Player {
     }
 
     render() {
-        this.el.css({})
+        this.el.css({left: (this.x + 20) + 'px', bottom: (this.y + 25) + 'px'});
     }
 }
