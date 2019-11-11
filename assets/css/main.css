@@ -19,6 +19,42 @@ body {
     background: url("../img/bg.png");
 }
 
+.foreground, .background {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.timer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 5px 15px;
+    background: #1d7bff;
+    color: #ffffff;
+}
+
+.hpbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hpbar span {
+    background: #a60000;
+    color: #ffffff;
+    text-align: center;
+    padding: 2px;
+    font-weight: bold;
+    width: 100%;
+}
+
 .screen {
     position: absolute;
     left: -50%;
@@ -112,4 +148,18 @@ tr > td:nth-child(3) {
 
 td, th {
     line-height: 2;
+}
+
+.foreground * {
+    position: absolute;
+    left: 0;
+    bottom: 25px;
+}
+
+.player img {
+    height: 100%;
+}
+
+.player {
+    height: 250px;
 }
