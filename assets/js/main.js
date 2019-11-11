@@ -21,7 +21,6 @@ $(document).ready(function () {
     $(document).on('keydown', function (ev) {
         if (game === null)
             return;
-        console.log(game.keys);
         if (ev.key === 'ArrowRight' || ev.key === 'd')
             game.keys.right = true;
         if (ev.key === 'ArrowLeft' || ev.key === 'a')
@@ -50,7 +49,7 @@ function skipVideo() {
 
 class Game {
     constructor() {
-        this.player = new Player(this, 0, 0, 0);
+        this.player = new Player(this, 20, 0, 0);
         this.frames = 0;
         this.time = 0;
         this.timeel = $('.timer span');
@@ -76,10 +75,14 @@ class Game {
 
             this.renderStatusbars();
         }
-        if (this.keys.right)
+        if (this.keys.right) {
             this.player.x += this.playerspeed;
-        if (this.keys.left)
+            this.player.elimg.css({transform: 'scaleX(1)'});
+        }
+        if (this.keys.left) {
             this.player.x -= this.playerspeed;
+            this.player.elimg.css({transform: 'scaleX(-1)'});
+        }
         if (this.keys.space && !game.player.isInFly && !game.player.isInFall)
             game.player.isInFly = true;
 
@@ -109,6 +112,7 @@ class Player {
         this.game = game;
         this.type = type;
         this.el = $('.player');
+        this.elimg = $('.player img');
         this.hp = 100;
         this.isInFly = false;
         this.isInFall = false;
@@ -129,6 +133,14 @@ class Player {
             } else {
                 this.y -= this.game.playerspeed;
             }
+        if (this.x < 20) {
+            this.x = 20;
+            body.css({backgroundPositionX: '+=' + this.game.playerspeed});
+        }
+        if (this.x > window.innerWidth / 2 - 50 - (this.elimg.width() / 2)) {
+            this.x = window.innerWidth / 2 - 50 - (this.elimg.width() / 2);
+            body.css({backgroundPositionX: '-=' + this.game.playerspeed});
+        }
         this.el.css({left: (this.x + 20) + 'px', bottom: (this.y + 25) + 'px'});
     }
 }
