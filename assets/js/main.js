@@ -71,4 +71,7 @@ class Player {
         this.hp = 100;
     }
 
+    render() {
+        this.el.css({})
+    }
 }
