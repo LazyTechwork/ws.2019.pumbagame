@@ -2,13 +2,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
 }
 
 html, body {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 html {
@@ -86,4 +86,30 @@ button, input[type=button] {
 
 .skipvideo:hover {
     background: rgba(0, 0, 0, .6);
+}
+
+table {
+    display: block;
+    margin-bottom: 2vh;
+}
+
+tr > th:nth-child(1),
+tr > td:nth-child(1) {
+    width: 10%;
+    text-align: left;
+}
+
+tr > th:nth-child(2),
+tr > td:nth-child(2) {
+    width: 200px;
+    text-align: left;
+}
+
+tr > td:nth-child(3) {
+    width: 200px;
+    text-align: center;
+}
+
+td, th {
+    line-height: 2;
 }
