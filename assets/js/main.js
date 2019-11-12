@@ -77,8 +77,9 @@ class Game {
         this.timeel = $('.timer span');
         this.hpel = $('.hpbar span');
         this.nickel = $('.nickname span');
-        this.cppos = 0;
+        this.cppos = random(20, window.innerWidth);
         this.cp = $('.caterpillar');
+        this.iscpate = false;
         this.playerspeed = 10;
         this.playername = playername;
         this.keys = {
@@ -86,7 +87,6 @@ class Game {
             right: false,
             space: false
         };
-
         this.renderStatusbars();
         requestAnimationFrame(() => this.loop());
     }
@@ -101,8 +101,10 @@ class Game {
             if (this.player.hp <= 0)
                 this.player.hp = 100;
 
-            this.cppos = random(20, window.innerWidth);
-
+            if (this.iscpate) {
+                this.cppos = random(20, window.innerWidth);
+                this.iscpate = false;
+            }
             this.renderStatusbars();
         }
         if (this.keys.right) {
