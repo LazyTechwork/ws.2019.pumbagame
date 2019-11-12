@@ -79,6 +79,9 @@ class Game {
         this.nickel = $('.nickname span');
         this.cppos = random(20, window.innerWidth);
         this.cp = $('.caterpillar');
+        this.cpimg = this.cp.children('img');
+        this.cpwidth = this.cpimg.width();
+        this.cpheight = this.cpimg.height();
         this.iscpate = false;
         this.playerspeed = 10;
         this.playername = playername;
@@ -100,12 +103,11 @@ class Game {
 
             if (this.player.hp <= 0)
                 this.player.hp = 100;
-
-            if (this.iscpate) {
-                this.cppos = random(20, window.innerWidth);
-                this.iscpate = false;
-            }
             this.renderStatusbars();
+        }
+        if (this.iscpate) {
+            this.cppos = random(20, window.innerWidth);
+            this.iscpate = false;
         }
         if (this.keys.right) {
             this.player.x += this.playerspeed;
@@ -117,7 +119,19 @@ class Game {
         }
         if (this.keys.space && !game.player.isInFly && !game.player.isInFall)
             game.player.isInFly = true;
+        let iscollides = false;
+        for (let i = this.player.x; i <= this.player.x + this.player.width; i++) {
+            iscollides = i === this.cppos;
+            if (iscollides) {
+                console.log(i);
+                break;
+            }
+        }
 
+        if (iscollides) {
+            this.iscpate = true;
+            this.player.hp += 10;
+        }
         this.player.render();
         this.cp.css({left: this.cppos});
         requestAnimationFrame(() => this.loop());
@@ -147,6 +161,8 @@ class Player {
         this.type = type;
         this.el = $('.player');
         this.elimg = $('.player img');
+        this.width = this.elimg.width();
+        this.height = this.elimg.height();
         this.hp = 100;
         this.isInFly = false;
         this.isInFall = false;
@@ -177,6 +193,6 @@ class Player {
             body.css({backgroundPositionX: '-=' + this.game.playerspeed});
             this.game.cppos -= this.game.playerspeed;
         }
-        this.el.css({left: (this.x + 20) + 'px', bottom: (this.y + 25) + 'px'});
+        this.el.css({left: (this.x) + 'px', bottom: (this.y + 25) + 'px'});
     }
 }
