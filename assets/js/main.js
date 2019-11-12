@@ -23,6 +23,7 @@ $(document).ready(function () {
                 body.animate({background: '#000000'});
             }
         });
+        $('#entername button').blur();
     });
     video.addEventListener('ended', () => skipVideo());
     $('.skipvideo').click(() => skipVideo());
@@ -56,10 +57,15 @@ $(document).ready(function () {
     });
 });
 
+function random(a, b) {
+    return Math.floor(Math.random() * (b - a) + a);
+}
+
 function skipVideo() {
     video.pause();
     instrscreen.animate({top: '150%'});
     gamescreen.fadeIn(400, () => game = new Game(nick));
+    $('.skipvideo').blur();
     // resultsscreen.animate({left: '50%'});
 }
 
@@ -71,6 +77,8 @@ class Game {
         this.timeel = $('.timer span');
         this.hpel = $('.hpbar span');
         this.nickel = $('.nickname span');
+        this.cppos = 0;
+        this.cp = $('.caterpillar');
         this.playerspeed = 10;
         this.playername = playername;
         this.keys = {
@@ -93,6 +101,8 @@ class Game {
             if (this.player.hp <= 0)
                 this.player.hp = 100;
 
+            this.cppos = random(20, window.innerWidth);
+
             this.renderStatusbars();
         }
         if (this.keys.right) {
@@ -107,7 +117,7 @@ class Game {
             game.player.isInFly = true;
 
         this.player.render();
-
+        this.cp.css({left: this.cppos});
         requestAnimationFrame(() => this.loop());
     }
 
@@ -158,10 +168,12 @@ class Player {
         if (this.x < 20) {
             this.x = 20;
             body.css({backgroundPositionX: '+=' + this.game.playerspeed});
+            this.game.cppos += this.game.playerspeed;
         }
         if (this.x > window.innerWidth / 2 - 50 - (this.elimg.width() / 2)) {
             this.x = window.innerWidth / 2 - 50 - (this.elimg.width() / 2);
             body.css({backgroundPositionX: '-=' + this.game.playerspeed});
+            this.game.cppos -= this.game.playerspeed;
         }
         this.el.css({left: (this.x + 20) + 'px', bottom: (this.y + 25) + 'px'});
     }

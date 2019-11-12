@@ -186,6 +186,14 @@ td, th {
     height: 250px;
 }
 
+.caterpillar img {
+    height: 100%;
+}
+
+.caterpillar {
+    height: 80px;
+}
+
 input.shake {
     animation: shake 1s;
 }
